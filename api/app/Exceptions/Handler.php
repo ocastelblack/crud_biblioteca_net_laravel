@@ -4,6 +4,8 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 class Handler extends ExceptionHandler
 {
@@ -43,8 +45,12 @@ class Handler extends ExceptionHandler
      */
     public function register()
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (Throwable $e, Request $request) {
+            if ($request->expectsJson()) {
+                $status = $e->getCode() ?: 500;
+                $message = $e->getMessage() ?: 'Error interno del servidor';
+                return response()->json(['error' => $message], $status);
+            }
         });
     }
 }
