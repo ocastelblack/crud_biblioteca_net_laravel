@@ -19,11 +19,10 @@ const Cake = () => {
   }, []);
 
   return (
-    <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Estadísticas</h2>
-      <p>Aquí podrás ver las estadísticas de préstamos en gráficos y exportar reportes.</p>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-        <div>
+    <div className="p-12 w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-10 w-full">
+        {/* Gráfica Libros más prestados */}
+        <div className="w-full">
           <h3 className="text-xl font-semibold mb-2">Libros más prestados</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
@@ -45,7 +44,8 @@ const Cake = () => {
           </ResponsiveContainer>
         </div>
 
-        <div>
+        {/* Gráfica Usuarios más activos */}
+        <div className="w-full">
           <h3 className="text-xl font-semibold mb-2">Usuarios que más solicitan préstamos</h3>
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>

@@ -7,6 +7,7 @@ use App\Models\Loan;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Exports\LoanExport;
 
 class LoanController extends Controller
 {
@@ -94,6 +95,14 @@ class LoanController extends Controller
 
         return response()->json($topUsers);
     }
+
+    public function exportLoans(Request $request)
+    {
+        $filters = $request->only(['user_id', 'book_id', 'date_from', 'date_to']);
+
+        return (new LoanExport)->export($filters);
+    }
+
 
     public function show($id)
     {

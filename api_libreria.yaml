@@ -1,0 +1,236 @@
+openapi: 3.0.0
+info:
+  title: API para Usuarios, Libros y Préstamos
+  description: Esta API maneja usuarios, productos (libros) y préstamos.
+  version: 1.0.0
+  contact:
+    name: Soporte Técnico
+    email: soporte@tudominio.com
+    url: https://tudominio.com
+
+servers:
+  - url: 'http://127.0.0.1:8000/api'
+    description: Servidor de desarrollo local
+
+paths:
+  /users:
+    get:
+      summary: Obtener lista de usuarios
+      responses:
+        '200':
+          description: Lista de usuarios obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+    post:
+      summary: Crear un nuevo usuario
+      requestBody:
+        description: Datos del usuario a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: Usuario creado correctamente
+        '400':
+          description: Error en los datos enviados
+
+  /user/{id}:
+    put:
+      summary: Actualizar usuario existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID del usuario a actualizar
+          schema:
+            type: integer
+      requestBody:
+        description: Datos actualizados del usuario
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: Usuario actualizado correctamente
+        '404':
+          description: Usuario no encontrado
+
+    delete:
+      summary: Eliminar un usuario
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID del usuario a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Usuario eliminado correctamente
+        '404':
+          description: Usuario no encontrado
+
+  /books:
+    get:
+      summary: Obtener lista de libros
+      responses:
+        '200':
+          description: Lista de libros obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+
+    post:
+      summary: Crear un nuevo libro
+      requestBody:
+        description: Datos del libro a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '201':
+          description: Libro creado correctamente
+        '400':
+          description: Error en los datos enviados
+
+  /book/{id}:
+    put:
+      summary: Actualizar libro existente
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID del libro a actualizar
+          schema:
+            type: integer
+      requestBody:
+        description: Datos actualizados del libro
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Book'
+      responses:
+        '200':
+          description: Libro actualizado correctamente
+        '404':
+          description: Libro no encontrado
+
+    delete:
+      summary: Eliminar un libro
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID del libro a eliminar
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Libro eliminado correctamente
+        '404':
+          description: Libro no encontrado
+
+  /loans:
+    get:
+      summary: Obtener lista de préstamos
+      responses:
+        '200':
+          description: Lista de préstamos obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Loan'
+
+    post:
+      summary: Crear un nuevo préstamo
+      requestBody:
+        description: Datos del préstamo a crear
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Loan'
+      responses:
+        '201':
+          description: Préstamo creado correctamente
+        '400':
+          description: Error en los datos enviados
+
+  /loans/{id}/return:
+    post:
+      summary: Marcar un préstamo como devuelto
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: ID del préstamo a devolver
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Préstamo marcado como devuelto
+        '404':
+          description: Préstamo no encontrado
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID del usuario
+        name:
+          type: string
+          description: Nombre del usuario
+        email:
+          type: string
+          description: Correo electrónico del usuario
+
+    Book:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID del libro
+        title:
+          type: string
+          description: Título del libro
+        author:
+          type: string
+          description: Autor del libro
+        genre:
+          type: string
+          description: Género del libro
+        availability:
+          type: integer
+          description: Disponibilidad del libro
+
+    Loan:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID del préstamo
+        userId:
+          type: integer
+          description: ID del usuario que realizó el préstamo
+        bookId:
+          type: integer
+          description: ID del libro prestado
+        dueDate:
+          type: string
+          format: date
+          description: Fecha de devolución

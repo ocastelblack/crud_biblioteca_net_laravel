@@ -138,3 +138,21 @@ export const fetchTopUsers = async () => {
     return [];
   }
 };
+
+export const downloadLoanReport = async (userId, bookId, dateFrom, dateTo) => {
+  try {
+    const response = await api.get('/loans/export', {
+      params: {
+        user_id: userId,
+        book_id: bookId,
+        date_from: dateFrom,
+        date_to: dateTo,
+      },
+      responseType: 'blob', // Esto es necesario para manejar archivos binarios
+    });
+    return response.data; // Regresa el archivo excel como Blob
+  } catch (error) {
+    console.error('Error downloading loan report:', error);
+    throw error;
+  }
+};
