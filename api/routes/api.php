@@ -31,4 +31,6 @@ Route::controller(LoanController::class)->group(function() {
     Route::get('/loans','index');
     Route::post('/loan','store');
     Route::post('/loans/{loan}/return','returnBook');
+    Route::get('/loans/top-books','topBooks');
+    Route::get('/top-users','topUsers');
 });

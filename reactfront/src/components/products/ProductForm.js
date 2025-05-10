@@ -5,11 +5,13 @@ import { createProduct, updateProduct, deleteProduct, fetchProducts } from '../.
 const ProductForm = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+
   const [títulos, setTitulo] = useState('');
   const [autores, setAutores] = useState('');
   const [generos, setGeneros] = useState('');
   const [disponibilidad, setDisponibilidad] = useState(1);
   const [isEditing, setIsEditing] = useState(false);
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (id) {
@@ -28,8 +30,21 @@ const ProductForm = () => {
     }
   }, [id]);
 
+  const validateForm = () => {
+    const newErrors = {};
+    if (!títulos.trim()) newErrors.títulos = 'El título es obligatorio';
+    if (!autores.trim()) newErrors.autores = 'El autor es obligatorio';
+    if (!generos.trim()) newErrors.generos = 'El género es obligatorio';
+    if (disponibilidad < 0) newErrors.disponibilidad = 'La disponibilidad no puede ser negativa';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) return;
+
     try {
       const data = { títulos, autores, generos, disponibilidad };
 
@@ -72,6 +87,7 @@ const ProductForm = () => {
             onChange={(e) => setTitulo(e.target.value)}
             className="p-2 border rounded w-full"
           />
+          {errors.títulos && <p className="text-red-500 text-sm">{errors.títulos}</p>}
         </div>
 
         <div className="mt-4">
@@ -82,6 +98,7 @@ const ProductForm = () => {
             onChange={(e) => setAutores(e.target.value)}
             className="p-2 border rounded w-full"
           />
+          {errors.autores && <p className="text-red-500 text-sm">{errors.autores}</p>}
         </div>
 
         <div className="mt-4">
@@ -92,6 +109,7 @@ const ProductForm = () => {
             onChange={(e) => setGeneros(e.target.value)}
             className="p-2 border rounded w-full"
           />
+          {errors.generos && <p className="text-red-500 text-sm">{errors.generos}</p>}
         </div>
 
         <div className="mt-4">
@@ -99,22 +117,31 @@ const ProductForm = () => {
           <input
             type="number"
             value={disponibilidad}
-            onChange={(e) => setDisponibilidad(e.target.value)}
+            onChange={(e) => setDisponibilidad(Number(e.target.value))}
             className="p-2 border rounded w-full"
           />
+          {errors.disponibilidad && <p className="text-red-500 text-sm">{errors.disponibilidad}</p>}
         </div>
 
-       <div className="button-group">
-          <button type="submit">
+        <div className="button-group mt-6 flex gap-2">
+          <button type="submit" className="bg-black text-white px-4 py-2 rounded">
             {isEditing ? 'Actualizar' : 'Crear'}
           </button>
 
-          <button type="button" onClick={() => navigate('/products')}>
+          <button
+            type="button"
+            onClick={() => navigate('/products')}
+            className="bg-gray-500 text-white px-4 py-2 rounded"
+          >
             Cancelar
           </button>
 
           {isEditing && (
-            <button type="button" onClick={handleDelete}>
+            <button
+              type="button"
+              onClick={handleDelete}
+              className="bg-red-600 text-white px-4 py-2 rounded"
+            >
               Eliminar
             </button>
           )}

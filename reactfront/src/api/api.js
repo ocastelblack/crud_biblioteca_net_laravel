@@ -87,3 +87,54 @@ export const deleteProduct = async (id) => {
     throw error;
   }
 };
+
+// Préstamos
+export const fetchLoans = async () => {
+  try {
+    const response = await api.get('/loans');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching loans:', error);
+    return [];
+  }
+};
+
+export const createLoan = async (data) => {
+  try {
+    const response = await api.post('/loan', data);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating loan:', error);
+    throw error;
+  }
+};
+
+export const returnLoan = async (loanId) => {
+  try {
+    const response = await api.post(`/loans/${loanId}/return`);
+    return response.data;
+  } catch (error) {
+    console.error('Error returning loan:', error);
+    throw error;
+  }
+};
+
+export const fetchTopBooks = async () => {
+  try {
+    const response = await api.get('/loans/top-books');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching top books:', error);
+    return [];
+  }
+};
+
+export const fetchTopUsers = async () => {
+  try {
+    const response = await api.get('/top-users');
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching top users:', error);
+    return [];
+  }
+};

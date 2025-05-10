@@ -1,10 +1,10 @@
 import React from 'react';
+import LoanList from '../components/loans/LoanList';
 
 const Loans = () => {
   return (
     <div>
-      <h2>Gestión de Préstamos</h2>
-      <p>Aquí podrás crear préstamos y registrar devoluciones.</p>
+      <LoanList />
     </div>
   );
 };

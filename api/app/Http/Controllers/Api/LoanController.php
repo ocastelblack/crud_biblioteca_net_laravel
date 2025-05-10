@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Loan;
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LoanController extends Controller
 {
@@ -67,6 +68,31 @@ class LoanController extends Controller
             'loan' => $loan,
             'product' => $product
         ]);
+    }
+
+    public function topBooks()
+    {
+        $topBooks = Loan::join('products', 'loans.product_id', '=', 'products.id')
+            ->select('products.id', 'products.títulos as title', DB::raw('COUNT(loans.id) as total'))
+            ->groupBy('products.id', 'products.títulos')
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get();
+
+        return response()->json($topBooks);
+    }
+
+    public function topUsers()
+    {
+        $topUsers = DB::table('loans')
+            ->join('users', 'loans.user_id', '=', 'users.id')
+            ->select('users.name as user', DB::raw('COUNT(loans.id) as total'))
+            ->groupBy('users.id', 'users.name')
+            ->orderByDesc('total')
+            ->limit(5)
+            ->get();
+
+        return response()->json($topUsers);
     }
 
     public function show($id)
